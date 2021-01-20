@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using RMWPFUi.Models;
+using RMWPFUi.Library.Models;
 
-namespace RMWPFUi.Helpers
+namespace RMWPFUi.Library.Api
 {
     public interface IAPIHelper
     {

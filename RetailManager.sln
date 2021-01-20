@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMWPFUi", "RMWPFUi\RMWPFUi.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMDataManager.Library", "RMDataManager.Library\RMDataManager.Library.csproj", "{6119A1A0-86E2-4D37-931E-CDE8B9ADF182}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMWPFUi.Library", "RMWPFUi.Library\RMWPFUi.Library.csproj", "{BF6ADE3D-0972-4AF5-98E8-8EF7313B3216}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{6119A1A0-86E2-4D37-931E-CDE8B9ADF182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6119A1A0-86E2-4D37-931E-CDE8B9ADF182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6119A1A0-86E2-4D37-931E-CDE8B9ADF182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6ADE3D-0972-4AF5-98E8-8EF7313B3216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6ADE3D-0972-4AF5-98E8-8EF7313B3216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6ADE3D-0972-4AF5-98E8-8EF7313B3216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6ADE3D-0972-4AF5-98E8-8EF7313B3216}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

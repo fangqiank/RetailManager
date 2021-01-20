@@ -6,6 +6,7 @@ using RMWPFUi.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using RMWPFUi.Helpers;
+using RMWPFUi.Library.Api;
 
 namespace RMWPFUi
 {

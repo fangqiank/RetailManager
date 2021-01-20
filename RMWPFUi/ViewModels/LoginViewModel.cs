@@ -1,6 +1,6 @@
 ﻿using System;
 using Caliburn.Micro;
-using RMWPFUi.Helpers;
+using RMWPFUi.Library.Api;
 using System.Threading.Tasks;
 
 namespace RMWPFUi.ViewModels
@@ -54,6 +54,8 @@ namespace RMWPFUi.ViewModels
             try
             {
                 var result = await _apiHelper.Authenticate(UserName, Password);
+
+                //capture more info about the user
             }
             catch (Exception ex)
             {

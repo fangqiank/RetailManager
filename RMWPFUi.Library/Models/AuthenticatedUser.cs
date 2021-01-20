@@ -1,4 +1,4 @@
-﻿namespace RMWPFUi.Models
+﻿namespace RMWPFUi.Library.Models
 {
     public class AuthenticatedUser
     {

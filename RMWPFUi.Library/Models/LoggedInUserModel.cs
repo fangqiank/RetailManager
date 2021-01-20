@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace RMDataManager.Library.Models
+namespace RMWPFUi.Library.Models
 {
-    public class UserModel
+    public class LoggedInUserModel
     {
         public string Id { get; set; }
         public string FirstName { get; set; }

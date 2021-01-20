@@ -1,12 +1,12 @@
-﻿using System;
+﻿using RMWPFUi.Library.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using RMWPFUi.Models;
 
-namespace RMWPFUi.Helpers
+namespace RMWPFUi.Library.Api
 {
     public class APIHelper : IAPIHelper
     {
@@ -21,8 +21,8 @@ namespace RMWPFUi.Helpers
         {
             string api = ConfigurationManager.AppSettings["api"];
 
-            _apiClient=new HttpClient();
-            _apiClient.BaseAddress=new Uri(api);
+            _apiClient = new HttpClient();
+            _apiClient.BaseAddress = new Uri(api);
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(
                 "application/json"));
@@ -30,11 +30,11 @@ namespace RMWPFUi.Helpers
 
         public async Task<AuthenticatedUser> Authenticate(string username, string password)
         {
-            var data =  new FormUrlEncodedContent(new[]
+            var data = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("grant_type","password"),
                 new KeyValuePair<string, string>("username",username),
-                new KeyValuePair<string, string>("password",password), 
+                new KeyValuePair<string, string>("password",password),
             });
 
             using (HttpResponseMessage res = await _apiClient.PostAsync("/token", data))
@@ -52,4 +52,4 @@ namespace RMWPFUi.Helpers
             }
         }
     }
-};
+}
