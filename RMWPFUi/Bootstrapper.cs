@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using RMWPFUi.Helpers;
 using RMWPFUi.Library.Api;
+using RMWPFUi.Library.Models;
 
 namespace RMWPFUi
 {
@@ -31,6 +32,7 @@ namespace RMWPFUi
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUserModel,LoggedInUserModel>()
                 .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()

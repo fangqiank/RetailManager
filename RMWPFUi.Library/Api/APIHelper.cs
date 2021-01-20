@@ -10,10 +10,12 @@ namespace RMWPFUi.Library.Api
 {
     public class APIHelper : IAPIHelper
     {
+        private readonly ILoggedInUserModel _loggedInUserModel;
         private HttpClient _apiClient;
 
-        public APIHelper()
+        public APIHelper(ILoggedInUserModel loggedInUserModel)
         {
+            _loggedInUserModel = loggedInUserModel;
             InitializeClient();
         }
 
@@ -51,5 +53,33 @@ namespace RMWPFUi.Library.Api
 
             }
         }
+
+        public async Task GetLoggedInUserInfo(string token)
+        {
+            _apiClient.DefaultRequestHeaders.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(
+                "application/json"));
+            _apiClient.DefaultRequestHeaders.Add("Authorization",$"Bearer {token}");
+
+            using (HttpResponseMessage res = await _apiClient.GetAsync("/api/user"))
+            {
+                if (res.IsSuccessStatusCode)
+                {
+                    var result = await res.Content.ReadAsAsync<LoggedInUserModel>();
+                    _loggedInUserModel.CreatedDate = result.CreatedDate;
+                    _loggedInUserModel.EmailAddress = result.EmailAddress;
+                    _loggedInUserModel.FirstName = result.FirstName;
+                    _loggedInUserModel.LastName = result.LastName;
+                    _loggedInUserModel.Id = result.Id;
+                    _loggedInUserModel.Token = token;
+                }
+                else
+                {
+                    throw new Exception(res.ReasonPhrase);
+                }
+            }
+        }
+
     }
 }

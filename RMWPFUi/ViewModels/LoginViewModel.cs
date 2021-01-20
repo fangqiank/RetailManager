@@ -56,6 +56,7 @@ namespace RMWPFUi.ViewModels
                 var result = await _apiHelper.Authenticate(UserName, Password);
 
                 //capture more info about the user
+                await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
             }
             catch (Exception ex)
             {
