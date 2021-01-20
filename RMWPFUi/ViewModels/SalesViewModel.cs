@@ -1,15 +1,37 @@
 ﻿using Caliburn.Micro;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using RMWPFUi.Library.Api;
+using RMWPFUi.Library.Models;
 
 namespace RMWPFUi.ViewModels
 {
     public class SalesViewModel:Screen
     {
-        private BindingList<string> _products;
+        private readonly IProductEndPoint _productEndPoint;
+        private BindingList<ProductModel> _products;
         private int _itemQuantity;
         private BindingList<string> _cart;
 
-        public BindingList<string> Products
+        public SalesViewModel(IProductEndPoint productEndPoint)
+        {
+            _productEndPoint = productEndPoint;
+          
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+            await LoadProducts();
+        }
+
+        private async Task LoadProducts()
+        {
+            var productList = await _productEndPoint.GetAll();
+            Products = new BindingList<ProductModel>(productList);
+        }
+
+        public BindingList<ProductModel> Products
         {
             get => _products;
             set
