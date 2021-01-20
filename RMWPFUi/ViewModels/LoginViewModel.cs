@@ -2,18 +2,21 @@
 using Caliburn.Micro;
 using RMWPFUi.Library.Api;
 using System.Threading.Tasks;
+using RMWPFUi.EventModels;
 
 namespace RMWPFUi.ViewModels
 {
     public class LoginViewModel:Screen
     {
         private readonly IAPIHelper _apiHelper;
+        private readonly IEventAggregator _events;
         private string _userName;
         private string _password;
 
-        public LoginViewModel(IAPIHelper apiHelper)
+        public LoginViewModel(IAPIHelper apiHelper,IEventAggregator events)
         {
             _apiHelper = apiHelper;
+            _events = events;
         }
 
         public string UserName
@@ -57,6 +60,8 @@ namespace RMWPFUi.ViewModels
 
                 //capture more info about the user
                 await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
+
+                _events.PublishOnUIThread(new LogOnEventModel());
             }
             catch (Exception ex)
             {
