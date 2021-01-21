@@ -10,8 +10,8 @@ namespace RMWPFUi.ViewModels
     {
         private readonly IAPIHelper _apiHelper;
         private readonly IEventAggregator _events;
-        private string _userName;
-        private string _password;
+        private string _userName = "zhangsan@mail.com";
+        private string _password="G73gle73!";
 
         public LoginViewModel(IAPIHelper apiHelper,IEventAggregator events)
         {

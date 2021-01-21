@@ -5,7 +5,7 @@ using RMDataManager.Library.Models;
 
 namespace TRMDataManager.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProductController : ApiController
     {
         [HttpGet]

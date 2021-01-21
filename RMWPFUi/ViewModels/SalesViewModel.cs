@@ -1,10 +1,10 @@
 ﻿using Caliburn.Micro;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using RMWPFUi.Library.Api;
 using RMWPFUi.Library.Helpers;
 using RMWPFUi.Library.Models;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RMWPFUi.ViewModels
 {
@@ -12,15 +12,17 @@ namespace RMWPFUi.ViewModels
     {
         private readonly IProductEndPoint _productEndPoint;
         private readonly IConfigHelper _configHelper;
+        private readonly ISaleEndPoint _saleEndPoint;
         private BindingList<ProductModel> _products;
         private int _itemQuantity = 1;
         private ProductModel _selectedProduct;
         private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
 
-        public SalesViewModel(IProductEndPoint productEndPoint,IConfigHelper configHelper)
+        public SalesViewModel(IProductEndPoint productEndPoint,IConfigHelper configHelper,ISaleEndPoint saleEndPoint)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
+            _saleEndPoint = saleEndPoint;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -172,6 +174,7 @@ namespace RMWPFUi.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(()=>Tax);
             NotifyOfPropertyChange(()=>Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         public bool CanRemoveFromCart
@@ -191,13 +194,14 @@ namespace RMWPFUi.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(()=>CanCheckOut);
         }
 
         public bool CanCheckOut
         {
             get
             {
-                bool output = false;
+                bool output = Cart.Count > 0;
 
                 //make sure something is selected
                 return output;
@@ -205,8 +209,21 @@ namespace RMWPFUi.ViewModels
             }
         }
 
-        public void CheckeOut()
+        public async Task CheckOut()
         {
+            //create a salemodel and post to the API
+            SaleModel sale = new SaleModel();
+
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+
+            await _saleEndPoint.PostSale(sale);
 
         }
 

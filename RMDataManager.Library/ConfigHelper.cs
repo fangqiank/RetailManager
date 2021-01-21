@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Configuration;
 
-namespace RMWPFUi.Library.Helpers
+namespace RMDataManager.Library
 {
-    public class ConfigHelper : IConfigHelper
+    public class ConfigHelper
     {
-        public decimal GetTaxRate()
+        public static decimal GetTaxRate()
         {
             //Todo Move this from config to API
             string rateText = ConfigurationManager.AppSettings["taxRate"];
 
-            bool IsValidTaxRate = decimal.TryParse(rateText,out decimal output);
+            bool IsValidTaxRate = decimal.TryParse(rateText, out decimal output);
 
             if (IsValidTaxRate == false)
             {
