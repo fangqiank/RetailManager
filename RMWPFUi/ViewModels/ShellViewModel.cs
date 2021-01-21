@@ -7,12 +7,16 @@ namespace RMWPFUi.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly SalesViewModel _salesVm;
+        //private readonly SimpleContainer _simpleContainer;
 
-        public ShellViewModel(IEventAggregator events,SalesViewModel salesVM)
+        //public ShellViewModel(IEventAggregator events,SalesViewModel salesVM, SimpleContainer _simpleContainer)
+        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM)
         {
             _events = events;
             _salesVm = salesVM;
+           // this._simpleContainer = _simpleContainer;
             _events.Subscribe(this);
+            //ActivateItem(_simpleContainer.GetInstance<LoginViewModel>());
             ActivateItem(IoC.Get<LoginViewModel>());
         }
 
