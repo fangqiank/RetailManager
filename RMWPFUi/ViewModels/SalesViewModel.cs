@@ -45,6 +45,17 @@ namespace RMWPFUi.ViewModels
             Products = new BindingList<ProductDisplayModel>(products);
         }
 
+        private async Task ResetSalesViewModel()
+        {
+            Cart = new BindingList<CartItemDisplayModel>();
+            await LoadProducts();
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+        }
+
         public BindingList<ProductDisplayModel> Products
         {
             get => _products;
@@ -200,7 +211,7 @@ namespace RMWPFUi.ViewModels
         {
             get
             {
-                bool output = SelectedCartItem!=null && SelectedCartItem?.Product.QuantityInStock>0;
+                bool output = SelectedCartItem!=null && SelectedCartItem?.QuantityInCart>0;
                 return output;
             }
         }
@@ -221,6 +232,7 @@ namespace RMWPFUi.ViewModels
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
             NotifyOfPropertyChange(()=>CanCheckOut);
+            NotifyOfPropertyChange(()=>CanAddToCart);
         }
 
         public bool CanCheckOut
@@ -250,6 +262,8 @@ namespace RMWPFUi.ViewModels
             }
 
             await _saleEndPoint.PostSale(sale);
+
+            await ResetSalesViewModel();
 
         }
 

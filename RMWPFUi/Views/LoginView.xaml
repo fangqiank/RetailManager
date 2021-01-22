@@ -25,6 +25,12 @@
                    FontFamily="Segoe UI Light" Margin="0 0 0 20">
             Login Form
         </TextBlock>
+        <!--error message-->
+        <!--<TextBlock x:Name="ErrorMessage"
+                   Visibility="{Binding IsErrorVisible, 
+            Converter={StaticResource BoolenToVisbilityConverter},
+            FallbackValue=Collapsed},Grid.
+            "/>-->
         <!--username row-->
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="0 0 0 10">
             Username:
