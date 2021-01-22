@@ -5,9 +5,10 @@ using RMDataManager.Library.Models;
 
 namespace TRMDataManager.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class InventoryController : ApiController
     {
+        [Authorize(Roles = "Cashier,Admin")]
         public List<InventoryModel> GetSaleReport()
         {
             InventoryData data = new InventoryData();
@@ -15,6 +16,7 @@ namespace TRMDataManager.Controllers
             return data.GetInventory();
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         public void Post(InventoryModel inventory)
         {
             InventoryData data = new InventoryData();
