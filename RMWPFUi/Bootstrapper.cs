@@ -5,10 +5,12 @@ using Caliburn.Micro;
 using RMWPFUi.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
+using AutoMapper;
 using RMWPFUi.Helpers;
 using RMWPFUi.Library.Api;
 using RMWPFUi.Library.Helpers;
 using RMWPFUi.Library.Models;
+using RMWPFUi.Models;
 
 namespace RMWPFUi
 {
@@ -26,8 +28,23 @@ namespace RMWPFUi
                 "PasswordChanged");
         }
 
+        private IMapper ConfigureAutomapper()
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<ProductModel, ProductDisplayModel>();
+                c.CreateMap<CartItemModel, CartItemDisplayModel>();
+            });
+
+            var output = config.CreateMapper();
+
+            return output;
+        }
+
         protected override void Configure()
         {
+            _container.Instance(ConfigureAutomapper());
+
             _container.Instance(_container)
                 .PerRequest<IProductEndPoint, ProductEndPoint>()
                 .PerRequest<ISaleEndPoint,SaleEndPoint>();

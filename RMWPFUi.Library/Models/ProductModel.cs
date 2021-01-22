@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RMWPFUi.Library.Models
+﻿namespace RMWPFUi.Library.Models
 {
     public class ProductModel
     {

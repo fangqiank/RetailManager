@@ -1,7 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using RMWPFUi.Library.Api;
 using RMWPFUi.Library.Helpers;
 using RMWPFUi.Library.Models;
+using RMWPFUi.Models;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,16 +16,19 @@ namespace RMWPFUi.ViewModels
         private readonly IProductEndPoint _productEndPoint;
         private readonly IConfigHelper _configHelper;
         private readonly ISaleEndPoint _saleEndPoint;
-        private BindingList<ProductModel> _products;
+        private readonly IMapper _mapper;
+        private BindingList<ProductDisplayModel> _products;
         private int _itemQuantity = 1;
-        private ProductModel _selectedProduct;
-        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+        private ProductDisplayModel _selectedProduct;
+        private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
-        public SalesViewModel(IProductEndPoint productEndPoint,IConfigHelper configHelper,ISaleEndPoint saleEndPoint)
+        public SalesViewModel(IProductEndPoint productEndPoint,IConfigHelper configHelper,
+            ISaleEndPoint saleEndPoint,IMapper mapper)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
             _saleEndPoint = saleEndPoint;
+            _mapper = mapper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -34,10 +40,11 @@ namespace RMWPFUi.ViewModels
         private async Task LoadProducts()
         {
             var productList = await _productEndPoint.GetAll();
-            Products = new BindingList<ProductModel>(productList);
+            var products = _mapper.Map<List<ProductDisplayModel>>(productList);
+            Products = new BindingList<ProductDisplayModel>(products);
         }
 
-        public BindingList<ProductModel> Products
+        public BindingList<ProductDisplayModel> Products
         {
             get => _products;
             set
@@ -47,7 +54,7 @@ namespace RMWPFUi.ViewModels
             }
         }
 
-        public ProductModel SelectedProduct
+        public ProductDisplayModel SelectedProduct
         {
             get => _selectedProduct;
             set
@@ -58,7 +65,7 @@ namespace RMWPFUi.ViewModels
             }
         }
 
-        public BindingList<CartItemModel> Cart
+        public BindingList<CartItemDisplayModel> Cart
         {
             get => _cart;
             set
@@ -150,18 +157,18 @@ namespace RMWPFUi.ViewModels
 
         public void AddToCart()
         {
-            CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            CartItemDisplayModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
 
             if (existingItem != null)
             {
                 existingItem.QuantityInCart += ItemQuantity;
                 //way of resfreshing the cart display
-                Cart.Remove(existingItem);
-                Cart.Add(existingItem);
+                //Cart.Remove(existingItem);
+                //Cart.Add(existingItem);
             }
             else
             {
-                CartItemModel item = new CartItemModel
+                CartItemDisplayModel item = new CartItemDisplayModel
                 {
                     Product = SelectedProduct,
                     QuantityInCart = ItemQuantity
