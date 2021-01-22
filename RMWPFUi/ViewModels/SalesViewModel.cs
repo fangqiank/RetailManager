@@ -20,6 +20,7 @@ namespace RMWPFUi.ViewModels
         private BindingList<ProductDisplayModel> _products;
         private int _itemQuantity = 1;
         private ProductDisplayModel _selectedProduct;
+        private CartItemDisplayModel _selectedCartItem;
         private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
         public SalesViewModel(IProductEndPoint productEndPoint,IConfigHelper configHelper,
@@ -62,6 +63,17 @@ namespace RMWPFUi.ViewModels
                 _selectedProduct = value;
                 NotifyOfPropertyChange(()=>SelectedProduct);
                 NotifyOfPropertyChange(()=>CanAddToCart);
+            }
+        }
+
+        public CartItemDisplayModel SelectedCartItem
+        {
+            get => _selectedCartItem;
+            set
+            {
+                _selectedCartItem = value;
+                NotifyOfPropertyChange(() => SelectedCartItem);
+                NotifyOfPropertyChange(() => CanRemoveFromCart);
             }
         }
 
@@ -188,16 +200,23 @@ namespace RMWPFUi.ViewModels
         {
             get
             {
-                bool output = false;
-
-                //make sure something is selected
+                bool output = SelectedCartItem!=null && SelectedCartItem?.Product.QuantityInStock>0;
                 return output;
-
             }
         }
 
         public void RemoveFromCart()
         {
+            SelectedCartItem.Product.QuantityInStock += 1;
+
+            if (SelectedCartItem.QuantityInCart > 1)
+            {
+                SelectedCartItem.QuantityInCart -= 1;
+            }
+            else
+            {
+                Cart.Remove(SelectedCartItem);
+            }
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
