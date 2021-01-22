@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using RMWPFUi.EventModels;
+using RMWPFUi.Library.Api;
 using RMWPFUi.Library.Models;
 
 namespace RMWPFUi.ViewModels
@@ -10,14 +11,18 @@ namespace RMWPFUi.ViewModels
         private readonly SalesViewModel _salesVm;
 
         private readonly ILoggedInUserModel _loggedInUserModel;
+
+        private readonly IAPIHelper _apiHelper;
         //private readonly SimpleContainer _simpleContainer;
 
         //public ShellViewModel(IEventAggregator events,SalesViewModel salesVM, SimpleContainer _simpleContainer)
-        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM,ILoggedInUserModel loggedInUserModel)
+        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM,
+            ILoggedInUserModel loggedInUserModel,IAPIHelper apiHelper)
         {
             _events = events;
             _salesVm = salesVM;
             _loggedInUserModel = loggedInUserModel;
+            _apiHelper = apiHelper;
             // this._simpleContainer = _simpleContainer;
             _events.Subscribe(this);
             //ActivateItem(_simpleContainer.GetInstance<LoginViewModel>());
@@ -47,7 +52,8 @@ namespace RMWPFUi.ViewModels
 
         public void LogOut()
         {
-            _loggedInUserModel.LogOffUser();
+            _loggedInUserModel.ResetUserModel();
+            _apiHelper.LogOffUser();
             ActivateItem(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsAccountVisible);
         }
