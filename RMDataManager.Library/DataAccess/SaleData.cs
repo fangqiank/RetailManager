@@ -52,22 +52,36 @@ namespace RMDataManager.Library.DataAccess
 
             sale.Total = sale.SubTotal + sale.Tax;
 
-            //save the sale model
-            SqlDataAccess sql = new SqlDataAccess();
-            sql.SaveData<SaleDbModel>("dbo.spSale_Insert",sale,"RMData");
-
-            //get the Id from the sale model
-            sale.Id = sql.LoadData<int, dynamic>("spSale_Lookup", 
-                new {CashierId = sale.CashierId, SaleDate = sale.SaleDate},"RMData").FirstOrDefault();
-
-            //Finish filling in the sale detail model
-            foreach (var item in details)
+            using (SqlDataAccess sql = new SqlDataAccess())
             {
-                item.SaleId = sale.Id;
+                try
+                {
+                    sql.StartTransaction("RMData");
 
-                //save the sale detail model
-                sql.SaveData("dbo.spSaleDetail_Insert", item, "RMData");
+                    //save the sale model
+                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
+
+                    //get the Id from the sale model
+                    sale.Id = sql.LoadDataInTransaction<int, dynamic>("spSale_Lookup",
+                        new { CashierId = sale.CashierId, SaleDate = sale.SaleDate }).FirstOrDefault();
+
+                    //Finish filling in the sale detail model
+                    foreach (var item in details)
+                    {
+                        item.SaleId = sale.Id;
+
+                        //save the sale detail model
+                        sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
+                    }
+                    //sql.CommitTransaction();  //complain no necessary commit again?
+                }
+                catch(Exception ex)
+                {
+                    sql.RollbackTransaction();
+                    throw;
+                }
             }
+                
         }
     }
 }
