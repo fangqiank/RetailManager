@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Caliburn.Micro;
 using RMWPFUi.Library.Api;
 using RMWPFUi.Library.Helpers;
@@ -6,8 +7,10 @@ using RMWPFUi.Library.Models;
 using RMWPFUi.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RMWPFUi.ViewModels
 {
@@ -17,6 +20,8 @@ namespace RMWPFUi.ViewModels
         private readonly IConfigHelper _configHelper;
         private readonly ISaleEndPoint _saleEndPoint;
         private readonly IMapper _mapper;
+        private readonly StatusInfoViewModel _status;
+        private readonly IWindowManager _window;
         private BindingList<ProductDisplayModel> _products;
         private int _itemQuantity = 1;
         private ProductDisplayModel _selectedProduct;
@@ -24,18 +29,48 @@ namespace RMWPFUi.ViewModels
         private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
         public SalesViewModel(IProductEndPoint productEndPoint,IConfigHelper configHelper,
-            ISaleEndPoint saleEndPoint,IMapper mapper)
+            ISaleEndPoint saleEndPoint,IMapper mapper,StatusInfoViewModel status,IWindowManager window)
         {
             _productEndPoint = productEndPoint;
             _configHelper = configHelper;
             _saleEndPoint = saleEndPoint;
             _mapper = mapper;
+            _status = status;
+            _window = window;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+
+                //var info = IoC.Get<StatusInfoViewModel>();
+
+                if (ex.Message=="Unauthorized")
+                {
+                    _status.UpdateMessage("Unauthorized Access",
+                             "You do not have permission to interact with the sales");
+                    _window.ShowDialog(_status, null, settings);
+                    
+                }
+                else
+                {
+                    _status.UpdateMessage("Fatal exception",
+                        ex.Message);
+                    _window.ShowDialog(_status, null, settings);
+                }
+
+                TryClose();
+            }
         }
 
         private async Task LoadProducts()
