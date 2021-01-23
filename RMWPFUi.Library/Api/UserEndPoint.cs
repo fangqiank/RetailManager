@@ -17,7 +17,7 @@ namespace RMWPFUi.Library.Api
 
         public async Task<List<UserModel>> GetAll()
         {
-            using (HttpResponseMessage res = await _apiHelper.ApiClient.GetAsync("/api/user/admin/getalluasers"))
+            using (HttpResponseMessage res = await _apiHelper.ApiClient.GetAsync("/api/user/admin/getallusers"))
             {
                 if (res.IsSuccessStatusCode)
                 {
@@ -25,6 +25,48 @@ namespace RMWPFUi.Library.Api
                     return result;
                 }
                 else
+                {
+                    throw new Exception(res.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<Dictionary<string,string>> GetAllRoles()
+        {
+            using (HttpResponseMessage res = await _apiHelper.ApiClient.GetAsync("/api/user/admin/getallroles"))
+            {
+                if (res.IsSuccessStatusCode)
+                {
+                    var result = await res.Content.ReadAsAsync<Dictionary<string,string>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(res.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task AddUserToRole(string userId, string roleName)
+        {
+            var data = new {userId, roleName};
+
+            using (HttpResponseMessage res = await _apiHelper.ApiClient.PostAsJsonAsync("/api/user/admin/addrole",data))
+            {
+                if (res.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(res.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task RemoveUserToRole(string userId, string roleName)
+        {
+            var data = new { userId, roleName };
+
+            using (HttpResponseMessage res = await _apiHelper.ApiClient.PostAsJsonAsync("/api/user/admin/removerole", data))
+            {
+                if (res.IsSuccessStatusCode == false)
                 {
                     throw new Exception(res.ReasonPhrase);
                 }
