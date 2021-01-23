@@ -50,6 +50,11 @@ namespace RMWPFUi.ViewModels
             TryClose();
         }
 
+        public void UserManagement()
+        {
+            ActivateItem(IoC.Get<UserViewModel>());
+        }
+
         public void LogOut()
         {
             _loggedInUserModel.ResetUserModel();
