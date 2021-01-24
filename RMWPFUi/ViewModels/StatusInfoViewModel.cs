@@ -18,7 +18,7 @@ namespace RMWPFUi.ViewModels
 
         public void Close()
         {
-            TryClose();
+            TryCloseAsync();
         }
     }
 }

@@ -59,17 +59,17 @@ namespace RMWPFUi.ViewModels
                 {
                     _status.UpdateMessage("Unauthorized Access",
                              "You do not have permission to interact with the sales");
-                    _window.ShowDialog(_status, null, settings);
+                    await _window.ShowDialogAsync(_status, null, settings);
                     
                 }
                 else
                 {
                     _status.UpdateMessage("Fatal exception",
                         ex.Message);
-                    _window.ShowDialog(_status, null, settings);
+                    await _window.ShowDialogAsync(_status, null, settings);
                 }
 
-                TryClose();
+                TryCloseAsync();
             }
         }
 

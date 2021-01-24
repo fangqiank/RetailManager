@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Caliburn.Micro;
 using RMWPFUi.Library.Api;
 using System.Threading.Tasks;
@@ -61,7 +62,7 @@ namespace RMWPFUi.ViewModels
                 //capture more info about the user
                 await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
 
-                _events.PublishOnUIThread(new LogOnEventModel());
+                await _events.PublishOnUIThreadAsync(new LogOnEventModel(),new CancellationToken());
             }
             catch (Exception ex)
             {

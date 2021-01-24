@@ -14,7 +14,8 @@ namespace RMDataManager.Library
 
             if (IsValidTaxRate == false)
             {
-                throw new Exception("The tax rate is not set up properly");
+                //throw new Exception("The tax rate is not set up properly");
+                output = 8.75m;
             }
 
             return output;

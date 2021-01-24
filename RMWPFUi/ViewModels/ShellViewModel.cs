@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
 using RMWPFUi.EventModels;
 using RMWPFUi.Library.Api;
 using RMWPFUi.Library.Models;
@@ -24,9 +26,9 @@ namespace RMWPFUi.ViewModels
             _loggedInUserModel = loggedInUserModel;
             _apiHelper = apiHelper;
             // this._simpleContainer = _simpleContainer;
-            _events.Subscribe(this);
+            _events.SubscribeOnPublishedThread(this);
             //ActivateItem(_simpleContainer.GetInstance<LoginViewModel>());
-            ActivateItem(IoC.Get<LoginViewModel>());
+            ActivateItemAsync(IoC.Get<LoginViewModel>(),new CancellationToken());
         }
 
         public bool IsAccountVisible
@@ -39,28 +41,34 @@ namespace RMWPFUi.ViewModels
             }
         }
 
-        public void Handle(LogOnEventModel message)
-        {
-            ActivateItem(_salesVm);
-            NotifyOfPropertyChange(()=>IsAccountVisible);
-        }
+        //public void Handle(LogOnEventModel message)
+        //{
+        //    ActivateItem(_salesVm);
+        //    NotifyOfPropertyChange(()=>IsAccountVisible);
+        //}
 
         public void ExitApplication()
         {
-            TryClose();
+            TryCloseAsync();
         }
 
-        public void UserManagement()
+        public async Task UserManagement()
         {
-            ActivateItem(IoC.Get<UserViewModel>());
+           await ActivateItemAsync(IoC.Get<UserViewModel>(),new CancellationToken());
         }
 
-        public void LogOut()
+        public async Task LogOut()
         {
             _loggedInUserModel.ResetUserModel();
             _apiHelper.LogOffUser();
-            ActivateItem(IoC.Get<LoginViewModel>());
+            await ActivateItemAsync(IoC.Get<LoginViewModel>(),new CancellationToken());
             NotifyOfPropertyChange(() => IsAccountVisible);
+        }
+
+        public async Task HandleAsync(LogOnEventModel message, CancellationToken cancellationToken)
+        {
+            await ActivateItemAsync(_salesVm,cancellationToken);
+            NotifyOfPropertyChange(()=> IsAccountVisible);
         }
     }
 }
