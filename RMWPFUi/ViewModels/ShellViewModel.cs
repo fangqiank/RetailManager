@@ -18,11 +18,9 @@ namespace RMWPFUi.ViewModels
         //private readonly SimpleContainer _simpleContainer;
 
         //public ShellViewModel(IEventAggregator events,SalesViewModel salesVM, SimpleContainer _simpleContainer)
-        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM,
-            ILoggedInUserModel loggedInUserModel,IAPIHelper apiHelper)
+        public ShellViewModel(IEventAggregator events, ILoggedInUserModel loggedInUserModel,IAPIHelper apiHelper)
         {
             _events = events;
-            _salesVm = salesVM;
             _loggedInUserModel = loggedInUserModel;
             _apiHelper = apiHelper;
             // this._simpleContainer = _simpleContainer;
@@ -67,7 +65,7 @@ namespace RMWPFUi.ViewModels
 
         public async Task HandleAsync(LogOnEventModel message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_salesVm,cancellationToken);
+            await ActivateItemAsync(IoC.Get<SalesViewModel>(),cancellationToken);
             NotifyOfPropertyChange(()=> IsAccountVisible);
         }
     }
