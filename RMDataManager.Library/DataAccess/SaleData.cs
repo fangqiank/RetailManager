@@ -3,16 +3,24 @@ using RMDataManager.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using TRMDataManager.Library.Models;
 
 namespace RMDataManager.Library.DataAccess
 {
     public class SaleData
     {
+        private readonly IConfiguration _configuration;
+
+        public SaleData(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void SaveSale(SaleModel saleInfo,string cashierId)
         {
             List<SaleDetailDBModel> details =new List<SaleDetailDBModel>();
-            ProductData products = new ProductData();
+            ProductData products = new ProductData(_configuration);
             var taxRate = ConfigHelper.GetTaxRate()/100;
             
             //filling the sale detail
@@ -52,7 +60,7 @@ namespace RMDataManager.Library.DataAccess
 
             sale.Total = sale.SubTotal + sale.Tax;
 
-            using (SqlDataAccess sql = new SqlDataAccess())
+            using (SqlDataAccess sql = new SqlDataAccess(_configuration))
             {
                 try
                 {
@@ -86,7 +94,7 @@ namespace RMDataManager.Library.DataAccess
 
         public List<SaleReportModel> GetSaleReport()
         {
-            SqlDataAccess sql = new SqlDataAccess();
+            SqlDataAccess sql = new SqlDataAccess(_configuration);
 
             var output = sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport",
                 new { }, "RMData");

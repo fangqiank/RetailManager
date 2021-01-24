@@ -1,7 +1,7 @@
-﻿using System;
-using Dapper;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -15,9 +15,19 @@ namespace RMDataManager.Library.Internal
     即从当前程序集或从包含类派生的类型，可以访问具有访问修饰符 protected internal 的类型或成员。*/
     internal class SqlDataAccess:IDisposable
     {
+        private readonly IConfiguration _configuration;
+
+        public SqlDataAccess(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public string GetConnectionString(string name)
         {
-            return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+           // return
+            //    @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RMData;Integrated Security=True;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            //return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+            return _configuration.GetConnectionString("RMData");
         }
 
         public List<T> LoadData<T, U>(string storeProcedure, U parameter, string connectionStringName)
