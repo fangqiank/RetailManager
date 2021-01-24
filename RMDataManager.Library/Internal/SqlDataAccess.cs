@@ -27,7 +27,7 @@ namespace RMDataManager.Library.Internal
            // return
             //    @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RMData;Integrated Security=True;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             //return ConfigurationManager.ConnectionStrings[name].ConnectionString;
-            return _configuration.GetConnectionString("RMData");
+            return _configuration.GetConnectionString(name);
         }
 
         public List<T> LoadData<T, U>(string storeProcedure, U parameter, string connectionStringName)

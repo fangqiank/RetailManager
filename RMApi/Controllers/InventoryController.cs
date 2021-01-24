@@ -20,6 +20,7 @@ namespace RMApi.Controllers
         }
 
         [Authorize(Roles = "Cashier,Admin")]
+        [HttpGet]
         public List<InventoryModel> GetSaleReport()
         {
             InventoryData data = new InventoryData(_configuration);
@@ -28,6 +29,7 @@ namespace RMApi.Controllers
         }
 
         [Authorize(Roles = "Admin,Manager")]
+        [HttpPost]
         public void Post(InventoryModel inventory)
         {
             InventoryData data = new InventoryData(_configuration);

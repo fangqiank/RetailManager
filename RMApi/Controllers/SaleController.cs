@@ -23,6 +23,7 @@ namespace RMApi.Controllers
 
         [Authorize(Roles = "Cashier,Admin")]
         //[Authorize(Users="")]
+        [HttpPost]
         public void Post(SaleModel sale)
         {
             SaleData data = new SaleData(_configuration);
@@ -34,6 +35,7 @@ namespace RMApi.Controllers
 
         [Authorize(Roles = "Admin")]
         [Route("getsalereport")]
+        [HttpGet]
         public List<SaleReportModel> GetSaleReport()
         {
             /*if (RequestContext.Principal.IsInRole("Admin"))
