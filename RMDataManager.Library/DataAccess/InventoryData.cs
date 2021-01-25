@@ -1,24 +1,24 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using RMDataManager.Library.Internal;
+﻿using RMDataManager.Library.Internal;
 using RMDataManager.Library.Models;
+using System.Collections.Generic;
 
 namespace RMDataManager.Library.DataAccess
 {
-    public class InventoryData
-    {
-        private readonly IConfiguration _configuration;
 
-        public InventoryData(IConfiguration configuration)
+    public class InventoryData : IInventoryData
+    {
+        private readonly ISqlDataAccess _sql;
+
+        public InventoryData(ISqlDataAccess sql)
         {
-            _configuration = configuration;
+            _sql = sql;
         }
 
         public List<InventoryModel> GetInventory()
         {
-            SqlDataAccess sql = new SqlDataAccess(_configuration);
+            //SqlDataAccess sql = new SqlDataAccess(_configuration);
 
-            var output = sql.LoadData<InventoryModel, dynamic>("dbo.spInventory_GetAll",
+            var output = _sql.LoadData<InventoryModel, dynamic>("dbo.spInventory_GetAll",
                 new { }, "RMData");
 
             return output;
@@ -26,9 +26,9 @@ namespace RMDataManager.Library.DataAccess
 
         public void SaveInventoryRecord(InventoryModel inventory)
         {
-            SqlDataAccess sql =new SqlDataAccess(_configuration);
-            ;
-            sql.SaveData("dbo.spInventory_Insert",inventory,"RMData");
+            //SqlDataAccess sql =new SqlDataAccess(_configuration);
+            
+            _sql.SaveData("dbo.spInventory_Insert",inventory,"RMData");
         }
     }
 }

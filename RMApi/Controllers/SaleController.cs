@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Security.Claims;
-using Microsoft.Extensions.Configuration;
 using RMDataManager.Library.DataAccess;
 using RMDataManager.Library.Models;
+using System.Collections.Generic;
+using System.Security.Claims;
 using TRMDataManager.Library.Models;
 
 namespace RMApi.Controllers
@@ -14,11 +13,11 @@ namespace RMApi.Controllers
     [Authorize]
     public class SaleController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly ISaleData _saleData;
 
-        public SaleController(IConfiguration configuration)
+        public SaleController(ISaleData saleData)
         {
-            _configuration = configuration;
+            _saleData = saleData;
         }
 
         [Authorize(Roles = "Cashier,Admin")]
@@ -26,10 +25,10 @@ namespace RMApi.Controllers
         [HttpPost]
         public void Post(SaleModel sale)
         {
-            SaleData data = new SaleData(_configuration);
+            //SaleData data = new SaleData(_configuration);
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);//RequestContext.Principal.Identity.GetUserId();
 
-            data.SaveSale(sale, userId);
+            _saleData.SaveSale(sale, userId);
 
         }
 
@@ -50,9 +49,9 @@ namespace RMApi.Controllers
                 //Do other
             }*/
 
-            SaleData data = new SaleData(_configuration);
+            //SaleData data = new SaleData(_configuration);
 
-            return data.GetSaleReport();
+            return _saleData.GetSaleReport();
         }
     }
 }

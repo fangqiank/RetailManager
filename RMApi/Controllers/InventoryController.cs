@@ -12,28 +12,28 @@ namespace RMApi.Controllers
     [Authorize]
     public class InventoryController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly IInventoryData _inventoryData;
 
-        public InventoryController(IConfiguration configuration)
+        public InventoryController(IInventoryData inventoryData)
         {
-            _configuration = configuration;
+            _inventoryData = inventoryData;
         }
 
         [Authorize(Roles = "Cashier,Admin")]
         [HttpGet]
         public List<InventoryModel> GetSaleReport()
         {
-            InventoryData data = new InventoryData(_configuration);
+            //InventoryData data = new InventoryData(_configuration);
 
-            return data.GetInventory();
+            return _inventoryData.GetInventory();
         }
 
         [Authorize(Roles = "Admin,Manager")]
         [HttpPost]
         public void Post(InventoryModel inventory)
         {
-            InventoryData data = new InventoryData(_configuration);
-            data.SaveInventoryRecord(inventory);
+            //InventoryData data = new InventoryData(_configuration);
+            _inventoryData.SaveInventoryRecord(inventory);
         }
     }
 }

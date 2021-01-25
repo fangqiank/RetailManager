@@ -2,24 +2,23 @@
 using RMDataManager.Library.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 
 namespace RMDataManager.Library.DataAccess
 {
-    public class ProductData
+    public class ProductData : IProductData
     {
-        private readonly IConfiguration _configuration;
+        private readonly ISqlDataAccess _sql;
 
-        public ProductData(IConfiguration configuration)
+        public ProductData(ISqlDataAccess sql)
         {
-            _configuration = configuration;
+            _sql = sql;
         }
 
         public List<ProductModel> GetProducts()
         {
-            SqlDataAccess sql = new SqlDataAccess(_configuration);
+            //SqlDataAccess sql = new SqlDataAccess(_configuration);
 
-            var output = sql.LoadData<ProductModel, dynamic>(
+            var output = _sql.LoadData<ProductModel, dynamic>(
                 "dbo.spProduct_GetAll",new{}, "RMData");
 
             return output;
@@ -27,9 +26,9 @@ namespace RMDataManager.Library.DataAccess
 
         public ProductModel GetProductById(int productId)
         {
-            SqlDataAccess sql = new SqlDataAccess(_configuration);
+            //SqlDataAccess sql = new SqlDataAccess(_configuration);
 
-            var output = sql.LoadData<ProductModel, dynamic>(
+            var output = _sql.LoadData<ProductModel, dynamic>(
                 "dbo.spProduct_GetById", new { Id = productId }, "RMData")
                 .FirstOrDefault();
 

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
 namespace RMApi.Controllers
 {
@@ -20,23 +19,23 @@ namespace RMApi.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly IUserData _data;
 
         public UserController(ApplicationDbContext context,UserManager<IdentityUser> userManager,
-            IConfiguration configuration)
+            IUserData data)
         {
             _context = context;
             _userManager = userManager;
-            _configuration = configuration;
+            _data = data;
         }
         // GET: User/Details/5
         [HttpGet]
         public UserModel GetById()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); //old way -- RequestContext.Principal.Identity.GetUserId();
-            UserData data = new UserData(_configuration);
+            //UserData data = new UserData(_configuration);
 
-            return data.GetUserById(userId).First();
+            return _data.GetUserById(userId).First();
         }
 
         [Authorize(Roles = "Admin")]

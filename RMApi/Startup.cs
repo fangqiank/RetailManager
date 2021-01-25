@@ -10,6 +10,8 @@ using Microsoft.OpenApi.Models;
 using RMApi.Data;
 using System;
 using System.Text;
+using RMDataManager.Library.DataAccess;
+using RMDataManager.Library.Internal;
 
 namespace RMApi
 {
@@ -33,6 +35,12 @@ namespace RMApi
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddTransient<IInventoryData, InventoryData>();
+            services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<ISaleData, SaleData>();
+            services.AddTransient<IUserData, UserData>();
+            services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 
             services.AddAuthentication(options =>
             {

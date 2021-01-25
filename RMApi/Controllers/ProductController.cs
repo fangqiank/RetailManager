@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using RMDataManager.Library.DataAccess;
 using RMDataManager.Library.Models;
+using System.Collections.Generic;
 
 namespace RMApi.Controllers
 {
@@ -12,18 +11,18 @@ namespace RMApi.Controllers
     [Authorize(Roles = "Cashier")]
     public class ProductController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly IProductData _data;
 
-        public ProductController(IConfiguration configuration)
+        public ProductController(IProductData data)
         {
-            _configuration = configuration;
+            _data = data;
         }
 
         [HttpGet]
         public List<ProductModel> Get()
         {
-            ProductData data = new ProductData(_configuration);
-            return data.GetProducts();
+            //ProductData data = new ProductData(_configuration);
+            return _data.GetProducts();
         }
     }
 }
