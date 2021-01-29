@@ -13,11 +13,33 @@ namespace RMWPFUi.ViewModels
         private readonly IEventAggregator _events;
         private string _userName = "zhangsan@mail.com";
         private string _password="G73gle73!";
+        private string _errorMessage;
 
         public LoginViewModel(IAPIHelper apiHelper,IEventAggregator events)
         {
             _apiHelper = apiHelper;
             _events = events;
+        }
+
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = ErrorMessage?.Length > 0;
+
+                return output;
+            }
+        }
+
+        public string ErrorMessage
+        {
+            get => _errorMessage; 
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
         }
 
         public string UserName
@@ -66,7 +88,7 @@ namespace RMWPFUi.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorMessage = ex.Message;
             }
         }
     }

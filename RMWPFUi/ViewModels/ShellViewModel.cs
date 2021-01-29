@@ -67,18 +67,25 @@ namespace RMWPFUi.ViewModels
            await ActivateItemAsync(IoC.Get<UserViewModel>(),new CancellationToken());
         }
 
+        public async Task LogIn()
+        {
+            await ActivateItemAsync(IoC.Get<UserViewModel>(), new CancellationToken());
+        }
+
         public async Task LogOut()
         {
             _loggedInUserModel.ResetUserModel();
             _apiHelper.LogOffUser();
             await ActivateItemAsync(IoC.Get<LoginViewModel>(),new CancellationToken());
-            NotifyOfPropertyChange(() => IsAccountVisible);
+            NotifyOfPropertyChange(() => IsLoggedIn);
+            NotifyOfPropertyChange(() => IsLoggedOut);
         }
 
         public async Task HandleAsync(LogOnEventModel message, CancellationToken cancellationToken)
         {
             await ActivateItemAsync(IoC.Get<SalesViewModel>(),cancellationToken);
-            NotifyOfPropertyChange(()=> IsAccountVisible);
+            NotifyOfPropertyChange(() => IsLoggedIn);
+            NotifyOfPropertyChange(() => IsLoggedOut);
         }
     }
 }
