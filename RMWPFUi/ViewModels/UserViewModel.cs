@@ -87,6 +87,7 @@ namespace RMWPFUi.ViewModels
             {
                 _selectedUserRole = value;
                 NotifyOfPropertyChange(()=>SelectedUserRole);
+                NotifyOfPropertyChange(() => CanRemoveSelectedRole);
             }
         }
 
@@ -99,6 +100,7 @@ namespace RMWPFUi.ViewModels
             {
                 _selectedAvailableRole = value;
                 NotifyOfPropertyChange(()=> SelectedAvailableRole);
+                NotifyOfPropertyChange(() => CanAddSelectedRole);
             }
         }
 
@@ -140,6 +142,8 @@ namespace RMWPFUi.ViewModels
         {
             var roles = await _userEndPoint.GetAllRoles();
 
+            AvailableRoles.Clear();
+
             foreach (var role in roles)
             {
                 if (UserRoles.IndexOf(role.Value) < 0)
@@ -149,12 +153,44 @@ namespace RMWPFUi.ViewModels
             }
         }
 
+        public bool CanAddSelectedRole
+        {
+            get
+            {
+                if (SelectedUser is null || SelectedAvailableRole is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+        }
+
         public async void AddSelectedRole()
         {
             await _userEndPoint.AddUserToRole(SelectedUser.Id, SelectedAvailableRole);
 
             UserRoles.Add(SelectedAvailableRole);
             AvailableRoles.Remove(SelectedAvailableRole);
+        }
+
+        public bool CanRemoveSelectedRole
+        {
+            get
+            {
+                if (SelectedUser is null || SelectedUserRole is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
         }
 
         public async void RemoveSelectedRole()
