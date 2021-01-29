@@ -1,4 +1,5 @@
-﻿using RMDataManager.Library.Internal;
+﻿using Microsoft.Extensions.Configuration;
+using RMDataManager.Library.Internal;
 using RMDataManager.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,38 @@ namespace RMDataManager.Library.DataAccess
     {
         private readonly IProductData _products;
         private readonly ISqlDataAccess _sql;
+        private readonly IConfiguration _config;
 
-        public SaleData(IProductData products,ISqlDataAccess sql)
+        public SaleData(IProductData products,ISqlDataAccess sql,IConfiguration config)
         {
             _products = products;
             _sql = sql;
+            _config = config;
+        }
+
+        public decimal GetTaxRate()
+        {
+            string rateText = _config.GetValue<string>("TaxRate");  //ConfigurationManager.AppSettings["taxRate"];
+
+            bool IsValidTaxRate = decimal.TryParse(rateText, out decimal output);
+
+            if (IsValidTaxRate == false)
+            {
+                throw new Exception("The tax rate is not set up properly");
+            }
+
+            output = output / 100;
+
+            return output;
         }
 
         public void SaveSale(SaleModel saleInfo,string cashierId)
         {
             List<SaleDetailDBModel> details =new List<SaleDetailDBModel>();
            // ProductData products = new ProductData(_configuration);
-            var taxRate = ConfigHelper.GetTaxRate()/100;
-            
+            //var taxRate = ConfigHelper.GetTaxRate()/100;
+            var taxRate = GetTaxRate();
+
             //filling the sale detail
             foreach (var item in saleInfo.SaleDetails)
             {

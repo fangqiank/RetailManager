@@ -53,5 +53,27 @@ namespace RMApi.Controllers
 
             return _saleData.GetSaleReport();
         }
+
+        [AllowAnonymous]
+        [Route("gettaxrate")]
+        [HttpGet]
+        public decimal GetTaxRate()
+        {
+            /*if (RequestContext.Principal.IsInRole("Admin"))
+            {
+                //Do admin stuff
+            }else if (RequestContext.Principal.IsInRole("Manager"))
+            {
+                //Do manager stuff
+            }
+            else
+            {
+                //Do other
+            }*/
+
+            //SaleData data = new SaleData(_configuration);
+
+            return _saleData.GetTaxRate();
+        }
     }
 }

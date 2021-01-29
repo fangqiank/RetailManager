@@ -10,10 +10,7 @@ namespace RMWPFUi.ViewModels
     public class ShellViewModel:Conductor<object>,IHandle<LogOnEventModel>
     {
         private readonly IEventAggregator _events;
-        private readonly SalesViewModel _salesVm;
-
         private readonly ILoggedInUserModel _loggedInUserModel;
-
         private readonly IAPIHelper _apiHelper;
         //private readonly SimpleContainer _simpleContainer;
 
@@ -28,6 +25,21 @@ namespace RMWPFUi.ViewModels
             //ActivateItem(_simpleContainer.GetInstance<LoginViewModel>());
             ActivateItemAsync(IoC.Get<LoginViewModel>(),new CancellationToken());
         }
+
+
+        public bool IsLoggedIn
+        {
+            get
+            {
+                bool output = string.IsNullOrWhiteSpace(_loggedInUserModel.Token) == false;
+
+                return output;
+            }
+        }
+
+
+        public bool IsLoggedOut => !IsLoggedIn;
+
 
         public bool IsAccountVisible
         {

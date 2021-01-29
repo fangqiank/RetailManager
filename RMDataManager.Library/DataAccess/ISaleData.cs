@@ -6,6 +6,7 @@ namespace RMDataManager.Library.DataAccess
 {
     public interface ISaleData
     {
+        decimal GetTaxRate();
         void SaveSale(SaleModel saleInfo,string cashierId);
         List<SaleReportModel> GetSaleReport();
     }
