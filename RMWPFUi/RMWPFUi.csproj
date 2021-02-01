@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <outputType>winExe</outputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <useWPF>true</useWPF>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Caliburn.Micro" Version="4.0.136-rc" />
+    <PackageReference Include="Caliburn.Micro" Version="4.0.161-rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RMWPFUi.Library\RMWPFUi.Library.csproj" />
