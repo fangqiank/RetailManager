@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -12,10 +13,10 @@ namespace RMApi
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsot", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                //.WriteTo.File("log.txt",rollingInterval:RollingInterval.Day)
+                //.WriteTo.File(Path.Combine("logs","log.txt"),rollingInterval:RollingInterval.Day)
                 .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();
